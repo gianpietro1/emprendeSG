@@ -2,17 +2,19 @@ import SplashScreen from 'react-native-splash-screen';
 import axios from 'axios';
 import {
   FlatList,
-  Image,
   SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {useFocusEffect} from '@react-navigation/native';
 import {useCallback, useState, useEffect} from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
+import VersionCheck from '../components/VersionCheck';
 
 const MainScreen = ({navigation}) => {
   const [open, setOpen] = useState(false);
@@ -56,7 +58,11 @@ const MainScreen = ({navigation}) => {
               : data,
           })
         }>
-        <Image style={styles.logos} src={item.item.logo} />
+        <FastImage
+          style={styles.logos}
+          source={{uri: item.item.logo}}
+          resizeMode={FastImage.resizeMode.contain}
+        />
         <Text style={styles.name}>{item.item.name}</Text>
       </TouchableOpacity>
     );
@@ -94,12 +100,14 @@ const MainScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <SearchBar
-        term={term}
-        placeholder={'Busca por marca o descripción'}
-        termChange={onTermChange}
-        cancelSearch={onCancelSearch}
-      />
+      <View style={styles.searchBar}>
+        <SearchBar
+          term={term}
+          placeholder={'Busca por marca o descripción'}
+          termChange={onTermChange}
+          cancelSearch={onCancelSearch}
+        />
+      </View>
       <DropDownPicker
         open={open}
         value={category}
@@ -121,6 +129,7 @@ const MainScreen = ({navigation}) => {
           renderItem={renderItem}
         />
       ) : null}
+      <VersionCheck />
     </SafeAreaView>
   );
 };
@@ -140,7 +149,6 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     alignSelf: 'center',
-    resizeMode: 'contain',
   },
   itemView: {
     height: 150,
@@ -150,6 +158,9 @@ const styles = StyleSheet.create({
   },
   name: {
     textAlign: 'center',
+  },
+  searchBar: {
+    marginTop: 15,
   },
 });
 

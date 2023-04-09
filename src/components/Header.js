@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   headerText: {
+    fontFamily: 'Chalkduster',
     fontSize: 15,
     fontWeight: 'bold',
   },

@@ -1,4 +1,4 @@
-package com.emprendesg;
+package com.magiqapps.emprendeSG;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

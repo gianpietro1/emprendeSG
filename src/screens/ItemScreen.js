@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {Button, Card} from '@rneui/themed';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Carousel from 'react-native-reanimated-carousel';
@@ -67,9 +68,9 @@ const ItemScreen = ({route, navigation}) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            email ? Linking.openURL(email) : null;
+            email ? Linking.openURL(`mailto:${email}`) : null;
           }}>
-          {renderSocialIcon('email', email ? '#1DB954' : null)}
+          {renderSocialIcon('email', email ? 'orange' : null)}
         </TouchableOpacity>
       </View>
     );
@@ -77,11 +78,14 @@ const ItemScreen = ({route, navigation}) => {
 
   const renderItem = index => {
     const item = items[index];
-    console.log(item.flyer);
     return (
       <Card containerStyle={styles.itemView}>
         <Card.Title style={styles.title}>{item.name}</Card.Title>
-        <Image style={styles.flyer} src={item.flyer}></Image>
+        <FastImage
+          style={styles.flyer}
+          source={{uri: item.flyer}}
+          resizeMode={FastImage.resizeMode.contain}
+        />
         <Text style={styles.description}>{item.description}</Text>
         {renderSocial(item)}
       </Card>
@@ -154,7 +158,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     height: 0.8 * SCREEN_WIDTH,
     width: 0.8 * SCREEN_WIDTH,
-    resizeMode: 'contain',
   },
   socialView: {
     flexDirection: 'row',

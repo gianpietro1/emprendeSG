@@ -1,4 +1,4 @@
-package com.emprendesg;
+package com.magiqapps.emprendeSG;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
