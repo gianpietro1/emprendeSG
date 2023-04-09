@@ -2,6 +2,7 @@ import {useRef} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Dimensions, View, StyleSheet} from 'react-native';
 import {Button, Input} from '@rneui/themed';
+import {transcoder} from 'googleapis/build/src/apis/transcoder';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -30,6 +31,7 @@ const SearchBar = ({cancelSearch, term, termChange, placeholder}) => {
       />
       {term ? (
         <Button
+          style={styles.cancelButtonStyle}
           type="clear"
           icon={
             <MaterialCommunityIcons
@@ -48,16 +50,18 @@ const SearchBar = ({cancelSearch, term, termChange, placeholder}) => {
 const styles = StyleSheet.create({
   backgroundStyle: {
     flexDirection: 'row',
-    width: 0.9 * SCREEN_WIDTH,
-    height: 0.11 * SCREEN_HEIGHT,
+    width: 0.8 * SCREEN_WIDTH,
     maxHeight: 85,
-    paddingHorizontal: 0.01 * SCREEN_WIDTH,
   },
   inputContainerStyle: {
-    borderBottomWidth: 0,
+    borderBottomWidth: 1,
   },
   inputStyle: {
     fontSize: FONT_SIZE,
+  },
+  cancelButtonStyle: {
+    marginLeft: -15,
+    zIndex: 1000,
   },
   cancelIconStyle: {
     color: 'grey',
