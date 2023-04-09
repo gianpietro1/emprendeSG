@@ -1,6 +1,6 @@
 import {
-  Button,
   Dimensions,
+  Image,
   Linking,
   SafeAreaView,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Card} from '@rneui/themed';
+import {Button, Card} from '@rneui/themed';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Carousel from 'react-native-reanimated-carousel';
 import Header from '../components/Header';
@@ -18,7 +18,6 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const ItemScreen = ({route, navigation}) => {
   const {activeIndex, items} = route.params;
-  console.log(activeIndex);
 
   const renderSocialIcon = (icon, color) => {
     return (
@@ -78,13 +77,14 @@ const ItemScreen = ({route, navigation}) => {
 
   const renderItem = index => {
     const item = items[index];
+    console.log(item.flyer);
     return (
-      <>
+      <Card containerStyle={styles.itemView}>
         <Card.Title style={styles.title}>{item.name}</Card.Title>
-        <Card.Image style={styles.flyer} source={item.flyer}></Card.Image>
+        <Image style={styles.flyer} src={item.flyer}></Image>
         <Text style={styles.description}>{item.description}</Text>
         {renderSocial(item)}
-      </>
+      </Card>
     );
   };
 
@@ -92,26 +92,41 @@ const ItemScreen = ({route, navigation}) => {
     <SafeAreaView style={styles.container}>
       <Header />
       <Button
-        title={'Back'}
+        buttonStyle={styles.button}
+        title={'Volver'}
+        color="primary"
+        icon={{
+          name: 'arrow-left',
+          type: 'font-awesome',
+          size: 15,
+          color: 'white',
+        }}
         onPress={() => navigation.navigate('MainScreen')}
       />
-      <Card containerStyle={styles.itemView}>
-        <Carousel
-          defaultIndex={0}
-          autoPlay={false}
-          data={[...new Array(items.length).keys()]}
-          scrollAnimationDuration={200}
-          renderItem={({index}) => renderItem(index)}
-          panGestureHandlerProps={{
-            activeOffsetX: [-10, 10],
-          }}
-        />
-      </Card>
+      <Carousel
+        defaultIndex={activeIndex}
+        width={0.95 * SCREEN_WIDTH}
+        autoPlay={false}
+        data={[...new Array(items.length).keys()]}
+        renderItem={({index}) => renderItem(index)}
+      />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  button: {
+    marginTop: 15,
+    width: 0.875 * SCREEN_WIDTH,
+    shadowColor: 'grey',
+    shadowOffset: {
+      width: 1,
+      height: 1,
+    },
+    shadowOpacity: 0.8,
+    shadowRadius: 1,
+    elevation: 8,
+  },
   container: {
     backgroundColor: 'white',
     flex: 1,
@@ -126,7 +141,6 @@ const styles = StyleSheet.create({
   itemView: {
     alignItems: 'center',
     flexDirection: 'column',
-    width: 0.95 * SCREEN_WIDTH,
     shadowColor: 'grey',
     shadowOffset: {
       width: 1,
@@ -138,8 +152,8 @@ const styles = StyleSheet.create({
   },
   flyer: {
     justifyContent: 'flex-start',
-    height: 0.9 * SCREEN_WIDTH,
-    width: 0.9 * SCREEN_WIDTH,
+    height: 0.8 * SCREEN_WIDTH,
+    width: 0.8 * SCREEN_WIDTH,
     resizeMode: 'contain',
   },
   socialView: {

@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   logo: {
-    height: 50,
+    height: 70,
     resizeMode: 'contain',
   },
 });

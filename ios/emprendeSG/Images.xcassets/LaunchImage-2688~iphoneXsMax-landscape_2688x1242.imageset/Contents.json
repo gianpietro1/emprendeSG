@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "LaunchImage-2688@3x~iphoneXsMax-landscape_2688x1242.png",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

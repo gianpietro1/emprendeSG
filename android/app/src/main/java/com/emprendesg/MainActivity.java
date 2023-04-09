@@ -7,6 +7,7 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate;
 
 // React Navigation - GL addition
 import android.os.Bundle;
+import org.devio.rn.splashscreen.SplashScreen; // Splash
 
 public class MainActivity extends ReactActivity {
 
@@ -22,7 +23,8 @@ public class MainActivity extends ReactActivity {
   // React Navigation - GL addition
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(null);
+    SplashScreen.show(this);
+    super.onCreate(savedInstanceState);
   }
 
   /**

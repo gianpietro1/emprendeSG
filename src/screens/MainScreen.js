@@ -1,3 +1,5 @@
+import SplashScreen from 'react-native-splash-screen';
+import axios from 'axios';
 import {
   FlatList,
   Image,
@@ -6,67 +8,41 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {useState} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
+import {useCallback, useState, useEffect} from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 
-const DATA = [
-  {
-    name: 'Paperstop',
-    description: 'Útiles de escritorio, juguetes y más.',
-    logo: require('../assets/temp/paperstopLogo.png'),
-    flyer: require('../assets/temp/paperstopFlyer.png'),
-    instagram: 'https://www.instagram.com/paperstop.pe/',
-    facebook: 'https://www.facebook.com/paperstopperu/',
-    whatsapp: '+51991686754',
-    email: '',
-    web: 'https://paperstop.pe/',
-    category: 'papelería',
-  },
-  {
-    name: 'Aquí Suena Perú',
-    description: 'Servicio de música ambiental con propósito.',
-    logo: require('../assets/temp/aspLogo.png'),
-    flyer: require('../assets/temp/aspFlyer.png'),
-    instagram: 'https://www.instagram.com/aquisuenaperu/',
-    facebook: 'https://www.facebook.com/aquisuenaperu/',
-    whatsapp: '+51991686754',
-    email: '',
-    web: 'https://aquisuenaperu.com/',
-    category: 'entretenimiento',
-  },
-  {
-    name: 'MocaCraft',
-    description: 'Papelería, regalos y manualidades.',
-    logo: require('../assets/temp/mocaLogo.jpeg'),
-    flyer: require('../assets/temp/mocaFlyer.jpeg'),
-    instagram: 'https://www.instagram.com/mocacraftstudio/',
-    facebook: 'https://www.facebook.com/mocacraft/',
-    whatsapp: '+51991686754',
-    email: '',
-    web: 'https://mocacraft.com/',
-    category: 'papelería',
-  },
-];
-
 const MainScreen = ({navigation}) => {
   const [open, setOpen] = useState(false);
-  const [data, setData] = useState(DATA);
+  const [data, setData] = useState([]);
+  const [origData, setOrigData] = useState([]);
   const [term, setTerm] = useState('');
   const [category, setCategory] = useState(null);
   const [items, setItems] = useState([
-    {label: 'Ninguna', value: null},
+    {label: 'Todas', value: null},
     {label: 'Entretenimiento', value: 'entretenimiento'},
     {label: 'Papelería', value: 'papelería'},
   ]);
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     console.log('RESETTING');
-  //     setData(DATA);
-  //   }, []),
-  // );
+  const getBusinesses = async () => {
+    await axios.get('https://sg.radioperu.pe/api/businesses').then(response => {
+      setData(response.data);
+      setOrigData(response.data);
+    });
+  };
+
+  useEffect(() => {
+    getBusinesses();
+    SplashScreen.hide();
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getBusinesses();
+    }, []),
+  );
 
   const renderItem = item => {
     return (
@@ -80,7 +56,7 @@ const MainScreen = ({navigation}) => {
               : data,
           })
         }>
-        <Image style={styles.logos} source={item.item.logo} />
+        <Image style={styles.logos} src={item.item.logo} />
         <Text style={styles.name}>{item.item.name}</Text>
       </TouchableOpacity>
     );
@@ -106,13 +82,13 @@ const MainScreen = ({navigation}) => {
     if (term.length > 2) {
       setData(filteredData(term, ['name', 'description']));
     } else {
-      setData(DATA);
+      setData(origData);
     }
   };
 
   const onCancelSearch = () => {
     setTerm('');
-    setData(DATA);
+    setData(origData);
   };
 
   return (
@@ -135,14 +111,16 @@ const MainScreen = ({navigation}) => {
         style={styles.dropdown}
         dropDownContainerStyle={styles.dropdown}
       />
-      <FlatList
-        data={data
-          .sort((a, b) => a.name.localeCompare(b.name))
-          .filter(item => (category ? item.category === category : true))}
-        numColumns={2}
-        keyExtractor={(item, index) => item.name}
-        renderItem={renderItem}
-      />
+      {data ? (
+        <FlatList
+          data={data
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .filter(item => (category ? item.category === category : true))}
+          numColumns={2}
+          keyExtractor={(item, index) => item.name}
+          renderItem={renderItem}
+        />
+      ) : null}
     </SafeAreaView>
   );
 };
