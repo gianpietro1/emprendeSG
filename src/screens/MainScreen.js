@@ -45,7 +45,9 @@ const MainScreen = ({navigation}) => {
 
   useFocusEffect(
     useCallback(() => {
-      getBusinesses();
+      if (term && term.length > 0) {
+        onTermChange();
+      }
     }, []),
   );
 
