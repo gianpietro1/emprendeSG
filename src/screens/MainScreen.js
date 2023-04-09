@@ -22,11 +22,7 @@ const MainScreen = ({navigation}) => {
   const [origData, setOrigData] = useState([]);
   const [term, setTerm] = useState('');
   const [category, setCategory] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'Todas', value: null},
-    {label: 'Entretenimiento', value: 'entretenimiento'},
-    {label: 'Papelería', value: 'papelería'},
-  ]);
+  const [items, setItems] = useState([]);
 
   const getBusinesses = async () => {
     await axios.get('https://sg.radioperu.pe/api/businesses').then(response => {
@@ -35,8 +31,15 @@ const MainScreen = ({navigation}) => {
     });
   };
 
+  const getCategories = async () => {
+    await axios.get('https://sg.radioperu.pe/api/categories').then(response => {
+      setItems(response.data);
+    });
+  };
+
   useEffect(() => {
     getBusinesses();
+    getCategories();
     SplashScreen.hide();
   }, []);
 
