@@ -148,6 +148,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     alignSelf: 'center',
+    backgroundColor: 'white',
     width: '80%',
     zIndex: 1000,
   },
