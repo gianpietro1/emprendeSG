@@ -1,10 +1,13 @@
 import {Image, Platform, StyleSheet, Text, View} from 'react-native';
-import logo from '../assets/logoPTA.png';
+import FastImage from 'react-native-fast-image';
 
 const Header = () => {
   return (
     <View style={styles.headerRow}>
-      <Image style={styles.logo} source={logo} />
+      <FastImage
+        style={styles.logo}
+        source={require('../assets/logoPTA.png')}
+      />
       <Text
         style={{
           ...styles.headerText,
@@ -29,6 +32,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     height: 70,
+    width: 70,
     resizeMode: 'contain',
   },
 });
