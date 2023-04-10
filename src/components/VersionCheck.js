@@ -4,31 +4,29 @@ import checkVersion from 'react-native-store-version';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const FONT_SIZE = 0.024 * SCREEN_HEIGHT;
-const LOCAL_VERSION = '1.0.0';
 
-const VersionChecker = () => {
-  const [remoteVersion, setRemoteVersion] = useState('old');
-  const [localVersion, setLocalVersion] = useState(LOCAL_VERSION);
+const VersionChecker = ({localVersion}) => {
+  const [remoteVersionStatus, setRemoteVersionStatus] = useState('old');
 
-  const iosURL = 'settings.ios_url';
+  const iosURL = 'settings.ios_url'; // actualizar
   const iosStoreURL = 'https://' + iosURL;
   const iosAppStoreURL = 'itms-apps://' + iosURL;
-  const androidURL = 'settings.android_url';
+
+  const androidURL = 'settings.android_url'; // actualizar
   const androidStoreURL = 'https://' + androidURL;
 
   useEffect(() => {
     (async () => {
       if (iosURL && androidURL) {
-        setRemoteVersion(await versionCheck());
+        setRemoteVersionStatus(await versionCheck());
       }
-      setLocalVersion(LOCAL_VERSION);
     })();
   }, [iosURL, androidURL]);
 
   const versionCheck = async () => {
     try {
       const check = await checkVersion({
-        version: LOCAL_VERSION, // app local version --> 1.5.51 IS ANDROID ONLY, NEXT STEP IS 52 FOR BOTH
+        version: localVersion, // app local version
         iosStoreURL,
         androidStoreURL,
         country: 'pe',
@@ -38,34 +36,42 @@ const VersionChecker = () => {
         return check.result;
       }
     } catch (e) {
-      // console.log(e);
+      return 'old';
     }
   };
 
   const renewVersion = () => {
-    return remoteVersion ? (
+    return remoteVersionStatus ? (
       <View
         style={{
           ...styles.renewVersion,
-          backgroundColor: '#383838',
+          backgroundColor:
+            remoteVersionStatus === 'new' ? '#b53737' : '#3c3c3c',
         }}>
-        <Text style={{color: 'white', fontSize: 0.7 * FONT_SIZE}}>
-          Hay una nueva versión, actualiza{' '}
-          <Text
-            style={{color: 'yellow'}}
-            onPress={() =>
-              Linking.openURL(
-                Platform.OS === 'ios' ? iosAppStoreURL : androidStoreURL,
-              )
-            }>
-            aquí
-          </Text>
+        <Text
+          style={{
+            color: 'white',
+            fontSize: 0.7 * FONT_SIZE,
+            fontWeight: 'bold',
+          }}>
+          {remoteVersionStatus === 'new' ? (
+            <Text
+              onPress={() =>
+                Linking.openURL(
+                  Platform.OS === 'ios' ? iosAppStoreURL : androidStoreURL,
+                )
+              }>
+              {`versión ${localVersion} es antigua - clic para actualizar`}
+            </Text>
+          ) : (
+            <Text>versión {localVersion}</Text>
+          )}
         </Text>
       </View>
     ) : null;
   };
 
-  return <>{remoteVersion === 'new' ? renewVersion() : null}</>;
+  return <>{renewVersion()}</>;
 };
 
 const styles = StyleSheet.create({

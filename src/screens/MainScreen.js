@@ -16,6 +16,8 @@ import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import VersionCheck from '../components/VersionCheck';
 
+const LOCAL_VERSION = '1.0.3';
+
 const MainScreen = ({navigation}) => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
@@ -26,21 +28,32 @@ const MainScreen = ({navigation}) => {
 
   const getBusinesses = async () => {
     await axios.get('https://sg.radioperu.pe/api/businesses').then(response => {
+      getCategories();
       setData(response.data);
       setOrigData(response.data);
+      SplashScreen.hide();
+      // setTimeout(() => SplashScreen.hide(), 1000);
     });
+  };
+
+  const sortExceptNull = (a, b) => {
+    if (a.value == b.value) return 0;
+    if (a.value == null) return -1;
+    if (b.value == null) return 1;
+
+    if (a.value < b.value) return -1;
+    if (a.value > b.value) return 1;
+    return 0;
   };
 
   const getCategories = async () => {
     await axios.get('https://sg.radioperu.pe/api/categories').then(response => {
-      setItems(response.data);
+      setItems(response.data.sort((a, b) => sortExceptNull(a, b)));
     });
   };
 
   useEffect(() => {
     getBusinesses();
-    getCategories();
-    SplashScreen.hide();
   }, []);
 
   useFocusEffect(
@@ -136,8 +149,7 @@ const MainScreen = ({navigation}) => {
           />
         </View>
       ) : null}
-
-      <VersionCheck />
+      <VersionCheck localVersion={LOCAL_VERSION} />
     </SafeAreaView>
   );
 };
