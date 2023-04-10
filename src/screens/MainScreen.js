@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
   dropdown: {
     alignSelf: 'center',
     width: '80%',
+    zIndex: 1000,
   },
   logos: {
     height: '100%',
@@ -160,6 +161,7 @@ const styles = StyleSheet.create({
     width: 150,
     margin: 10,
     padding: 10,
+    zIndex: 0,
   },
   name: {
     textAlign: 'center',
