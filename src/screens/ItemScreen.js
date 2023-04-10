@@ -25,7 +25,7 @@ const ItemScreen = ({route, navigation}) => {
       <View style={styles.socialIconView}>
         <MaterialCommunityIcons
           name={icon}
-          size={0.07 * SCREEN_HEIGHT}
+          size={0.12 * SCREEN_WIDTH}
           color={color ? color : '#C8C8C8'}
         />
       </View>

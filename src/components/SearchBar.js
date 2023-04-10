@@ -6,7 +6,7 @@ import {transcoder} from 'googleapis/build/src/apis/transcoder';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const FONT_SIZE = 0.024 * SCREEN_HEIGHT > 18 ? 18 : 0.024 * SCREEN_HEIGHT;
+const FONT_SIZE = 0.02 * SCREEN_HEIGHT > 16 ? 16 : 0.02 * SCREEN_HEIGHT;
 
 const SearchBar = ({cancelSearch, term, termChange, placeholder}) => {
   const cancelSearchLocal = () => {
@@ -20,6 +20,22 @@ const SearchBar = ({cancelSearch, term, termChange, placeholder}) => {
     <View style={styles.backgroundStyle}>
       <Input
         leftIcon={{type: 'font-awesome', name: 'search'}}
+        rightIcon={
+          term ? (
+            <Button
+              style={styles.cancelButtonStyle}
+              type="clear"
+              icon={
+                <MaterialCommunityIcons
+                  size={30}
+                  name="window-close"
+                  style={styles.cancelIconStyle}
+                />
+              }
+              onPress={cancelSearchLocal}
+            />
+          ) : null
+        }
         autoCapitalize="none"
         autoCorrect={false}
         style={styles.inputStyle}
@@ -29,20 +45,6 @@ const SearchBar = ({cancelSearch, term, termChange, placeholder}) => {
         onChangeText={termChange}
         ref={input}
       />
-      {term ? (
-        <Button
-          style={styles.cancelButtonStyle}
-          type="clear"
-          icon={
-            <MaterialCommunityIcons
-              size={30}
-              name="window-close"
-              style={styles.cancelIconStyle}
-            />
-          }
-          onPress={cancelSearchLocal}
-        />
-      ) : null}
     </View>
   );
 };
