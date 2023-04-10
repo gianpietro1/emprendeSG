@@ -125,15 +125,18 @@ const MainScreen = ({navigation}) => {
         dropDownContainerStyle={styles.dropdown}
       />
       {data ? (
-        <FlatList
-          data={data
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .filter(item => (category ? item.category === category : true))}
-          numColumns={2}
-          keyExtractor={(item, index) => item.name}
-          renderItem={renderItem}
-        />
+        <View style={{zIndex: -1}}>
+          <FlatList
+            data={data
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .filter(item => (category ? item.category === category : true))}
+            numColumns={2}
+            keyExtractor={(item, index) => item.name}
+            renderItem={renderItem}
+          />
+        </View>
       ) : null}
+
       <VersionCheck />
     </SafeAreaView>
   );
@@ -151,6 +154,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '80%',
     zIndex: 1000,
+    elevation: 1000,
   },
   logos: {
     height: '100%',
