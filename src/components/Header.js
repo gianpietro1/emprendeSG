@@ -1,11 +1,17 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, Platform, StyleSheet, Text, View} from 'react-native';
 import logo from '../assets/logoPTA.png';
 
 const Header = () => {
   return (
     <View style={styles.headerRow}>
       <Image style={styles.logo} source={logo} />
-      <Text style={styles.headerText}>emprendeSG</Text>
+      <Text
+        style={{
+          ...styles.headerText,
+          fontFamily: Platform.android ? 'chalkduster' : 'Chalkduster',
+        }}>
+        emprendeSG
+      </Text>
     </View>
   );
 };
@@ -18,9 +24,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   headerText: {
-    fontFamily: 'Chalkduster',
+    color: 'black',
     fontSize: 15,
-    fontWeight: 'bold',
   },
   logo: {
     height: 70,
