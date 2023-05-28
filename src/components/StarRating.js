@@ -79,7 +79,7 @@ const StarRating = ({item}) => {
         text: 'Sí',
         onPress: async () => {
           await axios.put(
-            `http://192.168.1.171:3002/api/business/vote?name=${item.name}`,
+            `https://sg.radioperu.pe/api/business/vote?name=${item.name}`,
             {
               vote: option,
             },
