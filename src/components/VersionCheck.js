@@ -12,7 +12,8 @@ const VersionChecker = ({localVersion}) => {
   const iosStoreURL = 'https://' + iosURL;
   const iosAppStoreURL = 'itms-apps://' + iosURL;
 
-  const androidURL = 'settings.android_url'; // actualizar
+  const androidURL =
+    'play.google.com/store/apps/details?id=com.magiqapps.emprendeSG'; // actualizar
   const androidStoreURL = 'https://' + androidURL;
 
   useEffect(() => {
