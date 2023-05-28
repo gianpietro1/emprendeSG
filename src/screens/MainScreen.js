@@ -139,7 +139,7 @@ const MainScreen = ({navigation}) => {
         dropDownContainerStyle={styles.dropdown}
       />
       {data ? (
-        <View style={{zIndex: -1}}>
+        <View style={styles.dataView}>
           <FlatList
             data={data
               .sort((a, b) => a.name.localeCompare(b.name))
@@ -147,6 +147,7 @@ const MainScreen = ({navigation}) => {
             numColumns={2}
             keyExtractor={(item, index) => item.name}
             renderItem={renderItem}
+            ListFooterComponent={<View style={{height: 60}} />}
           />
         </View>
       ) : null}
@@ -161,6 +162,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
+  },
+  dataView: {
+    flexDirection: 'column',
+    zIndex: -1,
+    flex: 1,
   },
   dropdown: {
     alignSelf: 'center',
