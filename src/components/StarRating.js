@@ -42,7 +42,7 @@ const StarRating = ({item}) => {
       if (localVotesJSON[item.name]) {
         const lastVote = localVotesJSON[item.name];
         const dateDiff = Date.now() - lastVote;
-        if (dateDiff < 10000) {
+        if (dateDiff < 86400000) {
           // can't vote
           Alert.alert(
             'Voto denegado',
