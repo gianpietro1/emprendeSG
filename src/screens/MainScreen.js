@@ -27,13 +27,16 @@ const MainScreen = ({navigation}) => {
   const [items, setItems] = useState([]);
 
   const getBusinesses = async () => {
-    await axios.get('https://sg.radioperu.pe/api/businesses').then(response => {
-      getCategories();
-      setData(response.data);
-      setOrigData(response.data);
-      SplashScreen.hide();
-      // setTimeout(() => SplashScreen.hide(), 1000);
-    });
+    // await axios.get('https://sg.radioperu.pe/api/businesses').then(response => {
+    await axios
+      .get('http://192.168.1.171:3002/api/businesses')
+      .then(response => {
+        getCategories();
+        setData(response.data);
+        setOrigData(response.data);
+        SplashScreen.hide();
+        // setTimeout(() => SplashScreen.hide(), 1000);
+      });
   };
 
   const sortExceptNull = (a, b) => {
@@ -58,6 +61,7 @@ const MainScreen = ({navigation}) => {
 
   useFocusEffect(
     useCallback(() => {
+      getBusinesses();
       if (term && term.length > 0) {
         onTermChange();
       }

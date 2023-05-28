@@ -1,6 +1,5 @@
 import {
   Dimensions,
-  Image,
   Linking,
   SafeAreaView,
   StyleSheet,
@@ -13,9 +12,11 @@ import {Button, Card} from '@rneui/themed';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Carousel from 'react-native-reanimated-carousel';
 import Header from '../components/Header';
+import StarRating from '../components/StarRating';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
+const FONT_SIZE = 0.03 * SCREEN_WIDTH > 12 ? 12 : 0.03 * SCREEN_WIDTH;
 
 const ItemScreen = ({route, navigation}) => {
   const {activeIndex, items} = route.params;
@@ -80,7 +81,30 @@ const ItemScreen = ({route, navigation}) => {
     const item = items[index];
     return (
       <Card containerStyle={styles.itemView}>
-        <Card.Title style={styles.title}>{item.name}</Card.Title>
+        <View style={styles.titleView}>
+          <Button
+            buttonStyle={styles.button}
+            color="red"
+            icon={{
+              name: 'arrow-left',
+              type: 'font-awesome',
+              size: 0.025 * SCREEN_WIDTH,
+              color: 'white',
+            }}
+            onPress={() => navigation.navigate('MainScreen')}
+          />
+          <Text style={styles.title}>{item.name}</Text>
+          <View style={styles.voteView}>
+            <MaterialCommunityIcons
+              name={'star'}
+              size={0.06 * SCREEN_WIDTH}
+              color={'#FDDA0D'}
+            />
+            <Text style={styles.voteNumber}>
+              {Math.round(item.voteAvg * 10) / 10}
+            </Text>
+          </View>
+        </View>
         <FastImage
           style={styles.flyer}
           source={{uri: item.flyer}}
@@ -88,6 +112,7 @@ const ItemScreen = ({route, navigation}) => {
         />
         <Text style={styles.description}>{item.description}</Text>
         {renderSocial(item)}
+        <StarRating item={item} />
       </Card>
     );
   };
@@ -95,18 +120,6 @@ const ItemScreen = ({route, navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <Button
-        buttonStyle={styles.button}
-        title={'Volver'}
-        color="primary"
-        icon={{
-          name: 'arrow-left',
-          type: 'font-awesome',
-          size: 15,
-          color: 'white',
-        }}
-        onPress={() => navigation.navigate('MainScreen')}
-      />
       <Carousel
         defaultIndex={activeIndex}
         width={0.95 * SCREEN_WIDTH}
@@ -120,8 +133,7 @@ const ItemScreen = ({route, navigation}) => {
 
 const styles = StyleSheet.create({
   button: {
-    marginTop: 15,
-    width: 0.875 * SCREEN_WIDTH,
+    alignSelf: 'flex-start',
     shadowColor: 'grey',
     shadowOffset: {
       width: 1,
@@ -136,9 +148,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
+    position: 'relative',
   },
   description: {
-    fontSize: 14,
+    fontSize: FONT_SIZE,
     marginVertical: 5,
     textAlign: 'center',
   },
@@ -157,14 +170,31 @@ const styles = StyleSheet.create({
   flyer: {
     justifyContent: 'flex-start',
     height: 0.8 * SCREEN_WIDTH,
+    marginTop: 10,
     width: 0.8 * SCREEN_WIDTH,
   },
   socialView: {
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
+  titleView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   title: {
-    fontSize: 16,
+    fontSize: 1.5 * FONT_SIZE,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+  },
+  voteView: {
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+  },
+  voteNumber: {
+    fontSize: 1 * FONT_SIZE,
+    fontWeight: 'bold',
+    alignSelf: 'center',
   },
 });
 
