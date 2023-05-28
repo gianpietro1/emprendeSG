@@ -70,44 +70,48 @@ const StarRating = ({item}) => {
 
   const vote = (localVotesJSON, option) => {
     setStarRating(option);
-    Alert.alert('Confirmar voto', `¿Deseas otorgar ${option} estrellas?`, [
-      {
-        text: 'Cancelar',
-        style: 'cancel',
-      },
-      {
-        text: 'Sí',
-        onPress: async () => {
-          await axios.put(
-            `https://sg.radioperu.pe/api/business/vote?name=${item.name}`,
-            {
-              vote: option,
-            },
-          );
-          if (!localVotesJSON) {
-            await AsyncStorage.setItem(
-              '@votesObject',
-              JSON.stringify({[item.name]: Date.now()}),
+    Alert.alert(
+      'Confirmar voto',
+      `¿Deseas otorgar ${option} estrellas?\n(solo puedes votar 1 vez al día)`,
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Sí',
+          onPress: async () => {
+            await axios.put(
+              `https://sg.radioperu.pe/api/business/vote?name=${item.name}`,
+              {
+                vote: option,
+              },
             );
-          } else {
-            if (localVotesJSON[item.name]) {
-              await AsyncStorage.mergeItem(
+            if (!localVotesJSON) {
+              await AsyncStorage.setItem(
                 '@votesObject',
                 JSON.stringify({[item.name]: Date.now()}),
               );
             } else {
-              await AsyncStorage.setItem(
-                '@votesObject',
-                JSON.stringify({
-                  ...localVotesJSON,
-                  [item.name]: Date.now(),
-                }),
-              );
+              if (localVotesJSON[item.name]) {
+                await AsyncStorage.mergeItem(
+                  '@votesObject',
+                  JSON.stringify({[item.name]: Date.now()}),
+                );
+              } else {
+                await AsyncStorage.setItem(
+                  '@votesObject',
+                  JSON.stringify({
+                    ...localVotesJSON,
+                    [item.name]: Date.now(),
+                  }),
+                );
+              }
             }
-          }
+          },
         },
-      },
-    ]);
+      ],
+    );
   };
 
   const animatedScaleStyle = {
