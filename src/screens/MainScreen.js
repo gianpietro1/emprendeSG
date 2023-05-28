@@ -16,7 +16,7 @@ import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import VersionCheck from '../components/VersionCheck';
 
-const LOCAL_VERSION = '1.0.4';
+const LOCAL_VERSION = '1.1.5';
 
 const MainScreen = ({navigation}) => {
   const [open, setOpen] = useState(false);
