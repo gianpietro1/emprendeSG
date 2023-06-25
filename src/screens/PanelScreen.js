@@ -75,23 +75,33 @@ const PanelScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <Button
-        buttonStyle={styles.button}
-        color="red"
-        icon={{
-          name: 'arrow-left',
-          type: 'font-awesome',
-          size: 0.025 * SCREEN_WIDTH,
-          color: 'white',
-        }}
-        onPress={() => navigation.navigate('PanelCreateScreen')}
-      />
       <ScrollView>{renderCards(news)}</ScrollView>
+      <View style={{height: 20}} />
+      <View style={styles.buttonView}>
+        <Button
+          buttonStyle={styles.button}
+          color="#0047AB"
+          icon={{
+            name: 'edit',
+            type: 'font-awesome',
+            size: 0.04 * SCREEN_WIDTH,
+            color: 'white',
+          }}
+          onPress={() => navigation.navigate('PanelCreateScreen')}>
+          Nuevo
+        </Button>
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  buttonView: {
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    marginBottom: 10,
+    marginEnd: '5%',
+  },
   container: {
     backgroundColor: 'white',
     flex: 1,
