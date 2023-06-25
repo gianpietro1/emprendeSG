@@ -6,10 +6,13 @@ import {View} from 'react-native';
 import MainScreen from './src/screens/MainScreen';
 import ItemScreen from './src/screens/ItemScreen';
 import PanelScreen from './src/screens/PanelScreen';
+import PanelCreateScreen from './src/screens/PanelCreateScreen';
+import AboutScreen from './src/screens/AboutScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const MainStack = createNativeStackNavigator();
 const PanelStack = createNativeStackNavigator();
+const AboutStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const MainStackScreen = () => {
@@ -37,7 +40,24 @@ const PanelStackScreen = () => {
         component={PanelScreen}
         options={{headerShown: false}}
       />
+      <PanelStack.Screen
+        name="PanelCreateScreen"
+        component={PanelCreateScreen}
+        options={{headerShown: false}}
+      />
     </PanelStack.Navigator>
+  );
+};
+
+const AboutStackScreen = () => {
+  return (
+    <AboutStack.Navigator>
+      <AboutStack.Screen
+        name="AboutScreen"
+        component={AboutScreen}
+        options={{headerShown: false}}
+      />
+    </AboutStack.Navigator>
   );
 };
 
@@ -67,10 +87,14 @@ export default function App() {
                 iconName = focused
                   ? 'format-list-bulleted'
                   : 'format-list-bulleted';
-              } else if (route.name === 'Anuncios PTA') {
+              } else if (route.name === 'Pedidos') {
                 iconName = focused
                   ? 'newspaper-variant-outline'
                   : 'newspaper-variant-outline';
+              } else if (route.name === 'Acerca de') {
+                iconName = focused
+                  ? 'information-outline'
+                  : 'information-outline';
               }
               return (
                 <View style={{flexDirection: 'row'}}>
@@ -84,7 +108,8 @@ export default function App() {
             },
           })}>
           <Tab.Screen name="Directorio" component={MainStackScreen} />
-          <Tab.Screen name="Anuncios PTA" component={PanelStackScreen} />
+          <Tab.Screen name="Pedidos" component={PanelStackScreen} />
+          <Tab.Screen name="Acerca de" component={AboutStackScreen} />
         </Tab.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>

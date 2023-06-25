@@ -1,13 +1,12 @@
 import {
   Dimensions,
-  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import {Card} from '@rneui/themed';
+import {Button, Card} from '@rneui/themed';
 import Moment from 'moment';
 import FastImage from 'react-native-fast-image';
 import Header from '../components/Header';
@@ -17,7 +16,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const news = [
   {
     id: 1,
-    title: 'ANUNCIO 1ANUNCIO 1ANUNCIO 1ANUNCIO 1ANUNCIO 1ANUNCIO 1',
+    title: 'Pedido',
     body: 'Les anunciamos esto.',
     date: '2023-03-12T23:00:00.000+00:00',
     image:
@@ -76,6 +75,17 @@ const PanelScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
+      <Button
+        buttonStyle={styles.button}
+        color="red"
+        icon={{
+          name: 'arrow-left',
+          type: 'font-awesome',
+          size: 0.025 * SCREEN_WIDTH,
+          color: 'white',
+        }}
+        onPress={() => navigation.navigate('PanelCreateScreen')}
+      />
       <ScrollView>{renderCards(news)}</ScrollView>
     </SafeAreaView>
   );
