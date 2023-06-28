@@ -30,7 +30,7 @@ const PanelScreen = ({navigation}) => {
   const {
     setGlobalUser,
     setGlobalToken,
-    state: {user},
+    state: {user, userToken},
   } = useContext(UserContext);
   const [news, setNews] = useState([]);
   const [loginUser, setLoginUser] = useState();
@@ -136,12 +136,7 @@ const PanelScreen = ({navigation}) => {
           }}>
           <View style={styles.cardTitle}>
             <Card.Title>{newsItem.name}</Card.Title>
-            <View style={styles.dateView}>
-              <Text style={styles.dateText}>
-                {newsItem.date ? Moment(newsItem.date).format('lll') : null}
-              </Text>
-            </View>
-            {newsItem.ownerEmail === user?.email ? (
+            {newsItem.ownerEmail === user?.email || user?.role === 'admin' ? (
               <TouchableOpacity onPress={() => deleteItem(newsItem._id)}>
                 <MaterialCommunityIcons
                   size={20}
@@ -150,6 +145,11 @@ const PanelScreen = ({navigation}) => {
                 />
               </TouchableOpacity>
             ) : null}
+          </View>
+          <View style={styles.dateView}>
+            <Text style={styles.dateText}>
+              {newsItem.date ? Moment(newsItem.date).format('lll') : null}
+            </Text>
           </View>
           <Card.Divider />
           <Text style={{marginVertical: 10}}>{newsItem.description}</Text>
@@ -184,6 +184,12 @@ const PanelScreen = ({navigation}) => {
     } else {
       setModalVisible(true);
     }
+  };
+
+  const logout = async () => {
+    setGlobalUser(null);
+    setGlobalToken(null);
+    AsyncStorage.removeItem('userToken');
   };
 
   const login = async () => {
@@ -268,14 +274,14 @@ const PanelScreen = ({navigation}) => {
             />
             <View style={styles.buttonRow}>
               <Pressable
-                style={[styles.button, styles.buttonOpen]}
-                onPress={login}>
-                <Text style={styles.textStyle}>Ingresar</Text>
-              </Pressable>
-              <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}>
                 <Text style={styles.textStyle}>Cerrar</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonOpen]}
+                onPress={login}>
+                <Text style={styles.textStyle}>Ingresar</Text>
               </Pressable>
             </View>
           </View>
@@ -291,6 +297,19 @@ const PanelScreen = ({navigation}) => {
       <ScrollView>{news.length ? renderCards(news) : null}</ScrollView>
       <View style={{height: 20}} />
       <View style={styles.buttonView}>
+        <Button
+          buttonStyle={styles.button}
+          color="#0047AB"
+          disabled={!userToken}
+          icon={{
+            name: 'reply',
+            type: 'font-awesome',
+            size: 0.04 * SCREEN_WIDTH,
+            color: 'white',
+          }}
+          onPress={() => logout()}>
+          Salir
+        </Button>
         <Button
           buttonStyle={styles.button}
           color="#0047AB"
