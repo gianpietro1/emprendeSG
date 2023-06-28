@@ -1,3 +1,4 @@
+import {Provider as UserProvider} from './src/context/UserContext';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -64,54 +65,56 @@ const AboutStackScreen = () => {
 export default function App() {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
-      <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={({route}) => ({
-            headerShown: false,
-            tabBarActiveTintColor: 'cyan',
-            tabBarInactiveTintColor: 'white',
-            tabBarLabelStyle: {
-              marginBottom: 5,
-            },
-            tabBarStyle: [
-              {
-                margin: 0,
-                paddingVertical: 5,
-                backgroundColor: '#383838',
-                display: 'flex',
+      <UserProvider>
+        <NavigationContainer>
+          <Tab.Navigator
+            screenOptions={({route}) => ({
+              headerShown: false,
+              tabBarActiveTintColor: 'cyan',
+              tabBarInactiveTintColor: 'white',
+              tabBarLabelStyle: {
+                marginBottom: 5,
               },
-            ],
-            tabBarIcon: ({focused, color, size}) => {
-              let iconName;
-              if (route.name === 'Directorio') {
-                iconName = focused
-                  ? 'format-list-bulleted'
-                  : 'format-list-bulleted';
-              } else if (route.name === 'Pedidos') {
-                iconName = focused
-                  ? 'newspaper-variant-outline'
-                  : 'newspaper-variant-outline';
-              } else if (route.name === 'Acerca de') {
-                iconName = focused
-                  ? 'information-outline'
-                  : 'information-outline';
-              }
-              return (
-                <View style={{flexDirection: 'row'}}>
-                  <MaterialCommunityIcons
-                    name={iconName}
-                    size={size}
-                    color={color}
-                  />
-                </View>
-              );
-            },
-          })}>
-          <Tab.Screen name="Directorio" component={MainStackScreen} />
-          <Tab.Screen name="Pedidos" component={PanelStackScreen} />
-          <Tab.Screen name="Acerca de" component={AboutStackScreen} />
-        </Tab.Navigator>
-      </NavigationContainer>
+              tabBarStyle: [
+                {
+                  margin: 0,
+                  paddingVertical: 5,
+                  backgroundColor: '#383838',
+                  display: 'flex',
+                },
+              ],
+              tabBarIcon: ({focused, color, size}) => {
+                let iconName;
+                if (route.name === 'Directorio') {
+                  iconName = focused
+                    ? 'format-list-bulleted'
+                    : 'format-list-bulleted';
+                } else if (route.name === 'Pedidos') {
+                  iconName = focused
+                    ? 'newspaper-variant-outline'
+                    : 'newspaper-variant-outline';
+                } else if (route.name === 'Acerca de') {
+                  iconName = focused
+                    ? 'information-outline'
+                    : 'information-outline';
+                }
+                return (
+                  <View style={{flexDirection: 'row'}}>
+                    <MaterialCommunityIcons
+                      name={iconName}
+                      size={size}
+                      color={color}
+                    />
+                  </View>
+                );
+              },
+            })}>
+            <Tab.Screen name="Directorio" component={MainStackScreen} />
+            <Tab.Screen name="Pedidos" component={PanelStackScreen} />
+            <Tab.Screen name="Acerca de" component={AboutStackScreen} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </UserProvider>
     </GestureHandlerRootView>
   );
 }

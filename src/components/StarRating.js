@@ -129,7 +129,7 @@ const StarRating = ({item}) => {
           <Animated.View style={animatedScaleStyle}>
             <MaterialIcons
               name={starRating >= option ? 'star' : 'star-border'}
-              size={45}
+              size={40}
               style={
                 starRating >= option
                   ? styles.starSelected

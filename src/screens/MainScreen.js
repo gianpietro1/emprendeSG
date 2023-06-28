@@ -1,5 +1,4 @@
 import SplashScreen from 'react-native-splash-screen';
-import axios from 'axios';
 import {
   FlatList,
   SafeAreaView,
@@ -8,17 +7,22 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import sgBackend from '../api/sgBackend';
 import FastImage from 'react-native-fast-image';
 import {useFocusEffect} from '@react-navigation/native';
-import {useCallback, useState, useEffect} from 'react';
+import {useCallback, useContext, useState, useEffect} from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import VersionCheck from '../components/VersionCheck';
+import {Context as UserContext} from '../context/UserContext';
 
 const LOCAL_VERSION = '1.1.5';
 
 const MainScreen = ({navigation}) => {
+  const {setGlobalUser, setGlobalToken} = useContext(UserContext);
+
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [origData, setOrigData] = useState([]);
@@ -27,13 +31,29 @@ const MainScreen = ({navigation}) => {
   const [items, setItems] = useState([]);
 
   const getBusinesses = async () => {
-    await axios.get('https://sg.radioperu.pe/api/businesses').then(response => {
+    await sgBackend.get('/businesses').then(response => {
       getCategories();
       setData(response.data);
       setOrigData(response.data);
       SplashScreen.hide();
       // setTimeout(() => SplashScreen.hide(), 1000);
     });
+  };
+
+  const validateTokenAndRedirect = async token => {
+    try {
+      await sgBackend
+        .get('/checkToken', {headers: {'x-access-token': token}})
+        .then(async response => {
+          if (response.data) {
+            // console.log('USER IS', response.data);
+            setGlobalUser(response.data);
+          }
+        });
+    } catch (e) {
+      await AsyncStorage.removeItem('userToken');
+      setGlobalUser(null);
+    }
   };
 
   const sortExceptNull = (a, b) => {
@@ -47,17 +67,30 @@ const MainScreen = ({navigation}) => {
   };
 
   const getCategories = async () => {
-    await axios.get('https://sg.radioperu.pe/api/categories').then(response => {
+    await sgBackend.get('/categories').then(response => {
       setItems(response.data.sort((a, b) => sortExceptNull(a, b)));
     });
   };
 
+  const getLocalToken = async () => {
+    const token = await AsyncStorage.getItem('userToken');
+    setGlobalToken(token);
+    return token;
+  };
+
   useEffect(() => {
     getBusinesses();
+    getLocalToken().then(token => {
+      if (token) {
+        validateTokenAndRedirect(token);
+      }
+    });
   }, []);
 
   useFocusEffect(
     useCallback(() => {
+      // setGlobalUser(null);
+      // AsyncStorage.removeItem('userToken');
       getBusinesses();
       if (term && term.length > 0) {
         onTermChange();

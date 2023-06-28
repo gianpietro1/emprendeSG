@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
+  Alert,
   View,
   StyleSheet,
   ScrollView,
@@ -10,28 +11,41 @@ import {
 } from 'react-native';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {Input, Button, Card} from 'react-native-elements';
+import {Input, Button, Card} from '@rneui/themed';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const PanelForm = ({initialValues, submit, cancel, deleteImage}) => {
+const PanelForm = ({initialValues, submit, cancel, user}) => {
   const [name, setName] = useState(initialValues.name || '');
   const [description, setDescription] = useState(
     initialValues.description || '',
   );
+  const [localWhatsapp, setLocalWhatsapp] = useState();
+
+  const [whatsapp, setWhatsapp] = useState(localWhatsapp);
+
   const [image, setImage] = useState(initialValues.image || '');
   const [localImage, setLocalImage] = useState(null);
+  const [fileObj, setFileObj] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const getLocalWhatsapp = async () => {
+    const localWhatsapp = await AsyncStorage.getItem('whatsapp');
+    setLocalWhatsapp(localWhatsapp);
+    setWhatsapp(localWhatsapp);
+  };
+
   useEffect(() => {
+    getLocalWhatsapp();
     getPermissionAsync();
   }, []);
 
-  const checkIfNewImageAndDeleteOld = image => {
-    const oldImage = initialValues.image && image ? initialValues.image : null;
-    if (oldImage) {
-      deleteImage(oldImage);
-    }
-  };
+  // const checkIfNewImageAndDeleteOld = image => {
+  //   const oldImage = initialValues.image && image ? initialValues.image : null;
+  //   if (oldImage) {
+  //     deleteImage(oldImage);
+  //   }
+  // };
 
   const hasAndroidPermission = async () => {
     const getCheckPermissionPromise = async () => {
@@ -91,13 +105,20 @@ const PanelForm = ({initialValues, submit, cancel, deleteImage}) => {
       {
         mediaType: 'photo',
         includeBase64: false,
-        maxHeight: 200,
-        maxWidth: 200,
+        // maxHeight: 200,
+        // maxWidth: 200,
       },
       response => {
         setLocalImage(response?.assets[0]?.uri);
+        setFileObj(response?.assets[0]);
       },
     );
+  };
+
+  const setWhatsappHandle = async whatsappNumber => {
+    await AsyncStorage.setItem('whatsapp', whatsappNumber);
+    setLocalWhatsapp(whatsappNumber);
+    setWhatsapp(whatsappNumber);
   };
 
   return (
@@ -141,6 +162,13 @@ const PanelForm = ({initialValues, submit, cancel, deleteImage}) => {
             onChangeText={setDescription}
             autoCorrect={false}
           />
+          <Input
+            label="Whatsapp de contacto"
+            value={whatsapp || localWhatsapp}
+            onChangeText={setWhatsappHandle}
+            autoCorrect={false}
+            keyboardType="numeric"
+          />
           <View style={styles.buttons}>
             <View style={styles.button}>
               <Button
@@ -155,13 +183,29 @@ const PanelForm = ({initialValues, submit, cancel, deleteImage}) => {
                 buttonStyle={styles.buttonRight}
                 loading={isLoading}
                 onPress={() => {
-                  submit({
-                    name,
-                    description,
-                    image: localImage,
-                  });
-                  setIsLoading(true);
-                  checkIfNewImageAndDeleteOld(localImage);
+                  if (name && description) {
+                    submit({
+                      name,
+                      description,
+                      image: fileObj,
+                      date: Date.now(),
+                      ownerName: user.username,
+                      ownerEmail: user.email,
+                      ownerWhatsapp: whatsapp,
+                    });
+                    setIsLoading(true);
+                    // checkIfNewImageAndDeleteOld(localImage);
+                  } else {
+                    Alert.alert(
+                      'Debe llenar al menos el título y descripción de su pedido',
+                      [
+                        {
+                          text: 'OK',
+                          style: 'cancel',
+                        },
+                      ],
+                    );
+                  }
                 }}
               />
             </View>
