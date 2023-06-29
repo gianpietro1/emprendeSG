@@ -18,7 +18,7 @@ import SearchBar from '../components/SearchBar';
 import VersionCheck from '../components/VersionCheck';
 import {Context as UserContext} from '../context/UserContext';
 
-const LOCAL_VERSION = '1.1.5';
+const LOCAL_VERSION = '1.1.7';
 
 const MainScreen = ({navigation}) => {
   const {setGlobalUser, setGlobalToken} = useContext(UserContext);

@@ -47,7 +47,7 @@ const VersionChecker = ({localVersion}) => {
         style={{
           ...styles.renewVersion,
           backgroundColor:
-            remoteVersionStatus === 'new' ? '#b53737' : '#3c3c3c',
+            remoteVersionStatus === 'new' ? '#b53737' : '#00308F',
         }}>
         <Text
           style={{
