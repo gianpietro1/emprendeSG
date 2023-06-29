@@ -17,6 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import sgBackend from '../api/sgBackend';
 import {Button, Card, Input} from '@rneui/themed';
 import {useFocusEffect} from '@react-navigation/native';
+import SearchBar from '../components/SearchBar';
 import Moment from 'moment';
 import FastImage from 'react-native-fast-image';
 import Header from '../components/Header';
@@ -33,14 +34,18 @@ const PanelScreen = ({navigation}) => {
     state: {user, userToken},
   } = useContext(UserContext);
   const [news, setNews] = useState([]);
+  const [origNews, setOrigNews] = useState([]);
   const [loginUser, setLoginUser] = useState();
   const [loginPassword, setLoginPassword] = useState();
   const [modalVisible, setModalVisible] = useState(false);
   const [securedPassword, setSecuredPassword] = useState(true);
+  const [searchTerm, setSearchTerm] = useState();
 
   const getItems = async () => {
-    const itemsResponse = await sgBackend.get('/panelitems');
-    setNews(itemsResponse.data);
+    await sgBackend.get('/panelitems').then(itemsResponse => {
+      setNews(itemsResponse?.data);
+      setOrigNews(itemsResponse?.data);
+    });
   };
 
   useEffect(() => {
@@ -50,6 +55,9 @@ const PanelScreen = ({navigation}) => {
   useFocusEffect(
     useCallback(() => {
       getItems();
+      if (searchTerm && searchTerm.length > 0) {
+        onTermChange();
+      }
     }, []),
   );
 
@@ -208,6 +216,7 @@ const PanelScreen = ({navigation}) => {
             setGlobalToken(userToken);
             await AsyncStorage.setItem('userToken', userToken);
             setModalVisible(false);
+            setSearchTerm(null);
             navigation.navigate('PanelCreateScreen');
           }
         });
@@ -290,11 +299,50 @@ const PanelScreen = ({navigation}) => {
     );
   };
 
+  const normalizeTerm = string => {
+    return string.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+  };
+
+  const filteredData = (search, keys) => {
+    const lowNormedSearch = normalizeTerm(search.toLowerCase());
+    return news.filter(item =>
+      keys.some(key =>
+        normalizeTerm(String(item[key]))
+          .toLowerCase()
+          .includes(lowNormedSearch),
+      ),
+    );
+  };
+
+  const onTermChange = term => {
+    setSearchTerm(term);
+    if (term.length > 2) {
+      setNews(filteredData(term, ['name', 'description']));
+    } else {
+      setNews(origNews);
+    }
+  };
+
+  const onCancelSearch = () => {
+    setSearchTerm('');
+    setNews(origNews);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header />
       {loginModal()}
-      <ScrollView>{news.length ? renderCards(news) : null}</ScrollView>
+      <View style={styles.searchBar}>
+        {origNews && origNews.length ? (
+          <SearchBar
+            term={searchTerm}
+            placeholder={'Busca por título o descripción'}
+            termChange={onTermChange}
+            cancelSearch={onCancelSearch}
+          />
+        ) : null}
+      </View>
+      <ScrollView>{news?.length ? renderCards(news) : null}</ScrollView>
       <View style={{height: 20}} />
       <View style={styles.buttonView}>
         <Button
@@ -420,6 +468,9 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+  },
+  searchBar: {
+    marginTop: 15,
   },
   trashIconStyle: {
     color: 'red',
