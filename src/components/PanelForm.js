@@ -148,6 +148,7 @@ const PanelForm = ({initialValues, submit, cancel, user}) => {
               title="Escoger Nueva Foto"
               onPress={pickImage}
               style={{margin: 5}}
+              buttonStyle={styles.buttonRight}
             />
           </View>
           <Input
@@ -223,7 +224,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   button: {flex: 1},
-  buttonLeft: {margin: 2, backgroundColor: '#dc3545'},
-  buttonRight: {margin: 2, backgroundColor: '#28a745'},
+  buttonLeft: {
+    backgroundColor: '#F194FF',
+    borderRadius: 20,
+    elevation: 2,
+    marginHorizontal: 5,
+    padding: 10,
+  },
+  buttonRight: {
+    backgroundColor: '#2196F3',
+    borderRadius: 20,
+    elevation: 2,
+    marginHorizontal: 5,
+    padding: 10,
+  },
 });
 export default PanelForm;

@@ -13,6 +13,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Carousel from 'react-native-reanimated-carousel';
 import Header from '../components/Header';
 import StarRating from '../components/StarRating';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -80,40 +81,43 @@ const ItemScreen = ({route, navigation}) => {
   const renderItem = index => {
     const item = items[index];
     return (
-      <Card containerStyle={styles.itemView}>
-        <View style={styles.titleView}>
-          <Button
-            buttonStyle={styles.button}
-            color="red"
-            icon={{
-              name: 'arrow-left',
-              type: 'font-awesome',
-              size: 0.025 * SCREEN_WIDTH,
-              color: 'white',
-            }}
-            onPress={() => navigation.navigate('MainScreen')}
-          />
-          <Text style={styles.title}>{item.name}</Text>
-          <View style={styles.voteView}>
-            <MaterialCommunityIcons
-              name={'star'}
-              size={0.06 * SCREEN_WIDTH}
-              color={'#FDDA0D'}
+      <ScrollView>
+        <Card containerStyle={styles.itemView}>
+          <View style={styles.titleView}>
+            <Button
+              buttonStyle={styles.button}
+              color="red"
+              icon={{
+                name: 'arrow-left',
+                type: 'font-awesome',
+                size: 0.025 * SCREEN_WIDTH,
+                color: 'white',
+              }}
+              onPress={() => navigation.navigate('MainScreen')}
             />
-            <Text style={styles.voteNumber}>
-              {Math.round(item.voteAvg * 10) / 10}
-            </Text>
+            <Text style={styles.title}>{item.name}</Text>
+            <View style={styles.voteView}>
+              <MaterialCommunityIcons
+                name={'star'}
+                size={0.06 * SCREEN_WIDTH}
+                color={'#FDDA0D'}
+              />
+              <Text style={styles.voteNumber}>
+                {Math.round(item.voteAvg * 10) / 10}
+              </Text>
+            </View>
           </View>
-        </View>
-        <FastImage
-          style={styles.flyer}
-          source={{uri: item.flyer}}
-          resizeMode={FastImage.resizeMode.contain}
-        />
-        <Text style={styles.description}>{item.description}</Text>
-        {renderSocial(item)}
-        <StarRating item={item} />
-      </Card>
+          <FastImage
+            style={styles.flyer}
+            source={{uri: item.flyer}}
+            resizeMode={FastImage.resizeMode.contain}
+          />
+          <Text style={styles.description}>{item.description}</Text>
+          {renderSocial(item)}
+          <StarRating item={item} />
+        </Card>
+        <View style={{height: 120}} />
+      </ScrollView>
     );
   };
 

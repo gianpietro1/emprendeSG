@@ -282,16 +282,16 @@ const PanelScreen = ({navigation}) => {
               value={loginPassword}
             />
             <View style={styles.buttonRow}>
-              <Pressable
+              <TouchableOpacity
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}>
                 <Text style={styles.textStyle}>Cerrar</Text>
-              </Pressable>
-              <Pressable
+              </TouchableOpacity>
+              <TouchableOpacity
                 style={[styles.button, styles.buttonOpen]}
                 onPress={login}>
                 <Text style={styles.textStyle}>Ingresar</Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -345,31 +345,35 @@ const PanelScreen = ({navigation}) => {
       <ScrollView>{news?.length ? renderCards(news) : null}</ScrollView>
       <View style={{height: 20}} />
       <View style={styles.buttonView}>
-        <Button
-          buttonStyle={styles.button}
-          color="#0047AB"
-          disabled={!userToken}
-          icon={{
-            name: 'reply',
-            type: 'font-awesome',
-            size: 0.04 * SCREEN_WIDTH,
-            color: 'white',
-          }}
-          onPress={() => logout()}>
-          Salir
-        </Button>
-        <Button
-          buttonStyle={styles.button}
-          color="#0047AB"
-          icon={{
-            name: 'edit',
-            type: 'font-awesome',
-            size: 0.04 * SCREEN_WIDTH,
-            color: 'white',
-          }}
+        <TouchableOpacity
+          style={
+            userToken
+              ? [styles.button, styles.buttonClose]
+              : [styles.button, styles.buttonDisabled]
+          }
+          onPress={() => logout()}
+          disabled={!userToken}>
+          <View style={{flexDirection: 'row'}}>
+            <MaterialCommunityIcons
+              name={'logout'}
+              color={'white'}
+              size={0.05 * SCREEN_WIDTH}
+            />
+            <Text style={styles.textStyle}>Salir</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.buttonOpen]}
           onPress={() => newPostifUserPresent()}>
-          Nuevo
-        </Button>
+          <View style={{flexDirection: 'row'}}>
+            <MaterialCommunityIcons
+              name={'note-edit-outline'}
+              color={'white'}
+              size={0.05 * SCREEN_WIDTH}
+            />
+            <Text style={styles.textStyle}>Nuevo</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -452,6 +456,9 @@ const styles = StyleSheet.create({
   },
   buttonClose: {
     backgroundColor: '#2196F3',
+  },
+  buttonDisabled: {
+    backgroundColor: 'lightgrey',
   },
   inputContainerStyle: {
     borderBottomWidth: 1,
