@@ -21,7 +21,7 @@ import {Context as UserContext} from '../context/UserContext';
 
 const LOCAL_VERSION = '1.1.8';
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const ITEM_SIZE = 0.4 * SCREEN_WIDTH;
+const ITEM_SIZE = 0.4 * SCREEN_WIDTH > 250 ? 250 : 0.4 * SCREEN_WIDTH;
 
 const MainScreen = ({navigation}) => {
   const {setGlobalUser, setGlobalToken} = useContext(UserContext);
@@ -180,7 +180,7 @@ const MainScreen = ({navigation}) => {
             data={data
               .sort((a, b) => a.name.localeCompare(b.name))
               .filter(item => (category ? item.category === category : true))}
-            numColumns={2}
+            numColumns={SCREEN_WIDTH > 768 ? 3 : 2}
             keyExtractor={(item, index) => item.name}
             renderItem={renderItem}
             ListFooterComponent={<View style={{height: 60}} />}
