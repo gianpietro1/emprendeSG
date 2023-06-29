@@ -3,7 +3,7 @@ import {Text, View, Linking, StyleSheet, Dimensions} from 'react-native';
 import checkVersion from 'react-native-store-version';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
-const FONT_SIZE = 0.024 * SCREEN_HEIGHT;
+const FONT_SIZE = 0.024 * SCREEN_HEIGHT > 22 ? 22 : 0.024 * SCREEN_HEIGHT;
 
 const VersionChecker = ({localVersion}) => {
   const [remoteVersionStatus, setRemoteVersionStatus] = useState('old');
