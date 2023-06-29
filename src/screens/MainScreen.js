@@ -1,5 +1,6 @@
 import SplashScreen from 'react-native-splash-screen';
 import {
+  Dimensions,
   FlatList,
   SafeAreaView,
   StyleSheet,
@@ -19,6 +20,8 @@ import VersionCheck from '../components/VersionCheck';
 import {Context as UserContext} from '../context/UserContext';
 
 const LOCAL_VERSION = '1.1.7';
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const ITEM_SIZE = 0.4 * SCREEN_WIDTH;
 
 const MainScreen = ({navigation}) => {
   const {setGlobalUser, setGlobalToken} = useContext(UserContext);
@@ -214,8 +217,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   itemView: {
-    height: 150,
-    width: 150,
+    height: ITEM_SIZE,
+    width: ITEM_SIZE,
     margin: 10,
     padding: 10,
     zIndex: 0,
