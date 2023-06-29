@@ -36,8 +36,7 @@ const ItemScreen = ({route, navigation}) => {
 
   const renderSocial = item => {
     const {facebook, instagram, whatsapp, web, email} = item;
-    const whatsappHelloText =
-      'Hola, vengo del app emprendeSG y necesito información.';
+    const whatsappHelloText = `Hola, escribo por el aviso de "${item.name}" en la aplicación emprendeSG`;
     return (
       <View style={styles.socialView}>
         <TouchableOpacity
