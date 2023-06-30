@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext} from 'react';
+import {useState, useEffect} from 'react';
 import {Text, View, Linking, StyleSheet, Dimensions} from 'react-native';
 import checkVersion from 'react-native-store-version';
 

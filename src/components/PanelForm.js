@@ -9,7 +9,7 @@ import {
   PermissionsAndroid,
   Platform,
 } from 'react-native';
-import {CameraRoll} from '@react-native-camera-roll/camera-roll';
+// import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {Input, Button, Card} from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';

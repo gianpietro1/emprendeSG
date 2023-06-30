@@ -1,5 +1,4 @@
 import createDataContext from './createDataContext';
-import sgBackend from '../api/sgBackend';
 
 const userReducer = (state, action) => {
   switch (action.type) {

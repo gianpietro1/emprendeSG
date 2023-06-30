@@ -21,7 +21,11 @@ import {Context as UserContext} from '../context/UserContext';
 
 const LOCAL_VERSION = '1.1.9';
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const ITEM_SIZE = 0.4 * SCREEN_WIDTH > 250 ? 250 : 0.4 * SCREEN_WIDTH;
+const ITEM_SIZE = SCREEN_WIDTH
+  ? 0.4 * SCREEN_WIDTH > 250
+    ? 250
+    : 0.4 * SCREEN_WIDTH
+  : 150;
 
 const MainScreen = ({navigation}) => {
   const {setGlobalUser, setGlobalToken} = useContext(UserContext);
@@ -71,14 +75,19 @@ const MainScreen = ({navigation}) => {
 
   const getCategories = async () => {
     await sgBackend.get('/categories').then(response => {
-      setItems(response.data.sort((a, b) => sortExceptNull(a, b)));
+      if (response.data) {
+        setItems(response.data.sort((a, b) => sortExceptNull(a, b)));
+      }
     });
   };
 
   const getLocalToken = async () => {
     const token = await AsyncStorage.getItem('userToken');
-    setGlobalToken(token);
-    return token;
+    if (token) {
+      setGlobalToken(token);
+      return token;
+    }
+    return null;
   };
 
   useEffect(() => {
@@ -92,8 +101,6 @@ const MainScreen = ({navigation}) => {
 
   useFocusEffect(
     useCallback(() => {
-      // setGlobalUser(null);
-      // AsyncStorage.removeItem('userToken');
       getBusinesses();
       if (term && term.length > 0) {
         onTermChange();

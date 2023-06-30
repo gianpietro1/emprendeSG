@@ -89,7 +89,7 @@ export default function App() {
                   iconName = focused
                     ? 'format-list-bulleted'
                     : 'format-list-bulleted';
-                } else if (route.name === 'Pedidos / Ofrecidos') {
+                } else if (route.name === 'Pedidos & Ofrecidos') {
                   iconName = focused
                     ? 'newspaper-variant-outline'
                     : 'newspaper-variant-outline';
@@ -111,7 +111,7 @@ export default function App() {
             })}>
             <Tab.Screen name="Directorio" component={MainStackScreen} />
             <Tab.Screen
-              name="Pedidos / Ofrecidos"
+              name="Pedidos & Ofrecidos"
               component={PanelStackScreen}
             />
             <Tab.Screen name="Acerca de" component={AboutStackScreen} />

@@ -1,7 +1,6 @@
 import {Dimensions, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import Header from '../components/Header';
 
-const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const AboutScreen = ({navigation}) => {

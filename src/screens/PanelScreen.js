@@ -4,7 +4,6 @@ import {
   Dimensions,
   Linking,
   Modal,
-  Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
