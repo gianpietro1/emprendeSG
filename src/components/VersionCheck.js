@@ -8,7 +8,7 @@ const FONT_SIZE = 0.024 * SCREEN_HEIGHT > 22 ? 22 : 0.024 * SCREEN_HEIGHT;
 const VersionChecker = ({localVersion}) => {
   const [remoteVersionStatus, setRemoteVersionStatus] = useState('old');
 
-  const iosURL = 'settings.ios_url'; // actualizar
+  const iosURL = 'apps.apple.com/us/app/radioperu-pe/id1540861189'; // actualizar
   const iosStoreURL = 'https://' + iosURL;
   const iosAppStoreURL = 'itms-apps://' + iosURL;
 
