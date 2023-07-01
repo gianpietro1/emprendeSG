@@ -39,27 +39,24 @@ const MainScreen = ({navigation}) => {
   const [items, setItems] = useState([]);
 
   const getBusinesses = async () => {
-    try {
-      await sgBackend.get('/businesses').then(response => {
+    await sgBackend
+      .get('/businesses')
+      .then(response => {
         getCategories();
         setData(response.data);
         setOrigData(response.data);
         SplashScreen.hide();
         // setTimeout(() => SplashScreen.hide(), 1000);
+      })
+      .catch(e => {
+        //console.log(e);
+        SplashScreen.hide();
+        Alert.alert(
+          'Error en la conexión al servidor, por favor revise su conexión a Internet y reinicie la aplicación.',
+          '',
+          [{text: 'Cerrar'}],
+        );
       });
-    } catch (e) {
-      //console.log(e);
-      SplashScreen.hide();
-      Alert.alert(
-        'Error en la conexión al servidor, por favor revise su conexión a Internet y reinicie la aplicación.',
-        [
-          {
-            text: 'OK',
-            style: 'cancel',
-          },
-        ],
-      );
-    }
   };
 
   const validateTokenAndRedirect = async token => {

@@ -49,12 +49,8 @@ const PanelScreen = ({navigation}) => {
     } catch (e) {
       Alert.alert(
         'Error en la conexión al servidor, por favor revise su conexión a Internet y reinicie la aplicación.',
-        [
-          {
-            text: 'OK',
-            style: 'cancel',
-          },
-        ],
+        '',
+        [{text: 'Cerrar'}],
       );
     }
   };
