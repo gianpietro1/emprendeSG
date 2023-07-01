@@ -20,7 +20,7 @@ import SearchBar from '../components/SearchBar';
 import VersionCheck from '../components/VersionCheck';
 import {Context as UserContext} from '../context/UserContext';
 
-const LOCAL_VERSION = '1.1.10';
+const LOCAL_VERSION = '1.1.11';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const ITEM_SIZE = SCREEN_WIDTH
   ? 0.4 * SCREEN_WIDTH > 250
