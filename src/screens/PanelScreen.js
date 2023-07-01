@@ -41,10 +41,22 @@ const PanelScreen = ({navigation}) => {
   const [searchTerm, setSearchTerm] = useState();
 
   const getItems = async () => {
-    await sgBackend.get('/panelitems').then(itemsResponse => {
-      setNews(itemsResponse?.data);
-      setOrigNews(itemsResponse?.data);
-    });
+    try {
+      await sgBackend.get('/panelitems').then(itemsResponse => {
+        setNews(itemsResponse?.data);
+        setOrigNews(itemsResponse?.data);
+      });
+    } catch (e) {
+      Alert.alert(
+        'Error en la conexión al servidor, por favor revise su conexión a Internet y reinicie la aplicación.',
+        [
+          {
+            text: 'OK',
+            style: 'cancel',
+          },
+        ],
+      );
+    }
   };
 
   useEffect(() => {
@@ -243,7 +255,7 @@ const PanelScreen = ({navigation}) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>
-              Para subir pedidos debes ingresar con tus credenciales
+              Para subir o borrar pedidos debes ingresar con tus credenciales
             </Text>
             <Input
               leftIcon={{type: 'font-awesome', name: 'user'}}

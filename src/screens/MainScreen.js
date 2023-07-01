@@ -1,5 +1,6 @@
 import SplashScreen from 'react-native-splash-screen';
 import {
+  Alert,
   Dimensions,
   FlatList,
   SafeAreaView,
@@ -38,13 +39,27 @@ const MainScreen = ({navigation}) => {
   const [items, setItems] = useState([]);
 
   const getBusinesses = async () => {
-    await sgBackend.get('/businesses').then(response => {
-      getCategories();
-      setData(response.data);
-      setOrigData(response.data);
+    try {
+      await sgBackend.get('/businesses').then(response => {
+        getCategories();
+        setData(response.data);
+        setOrigData(response.data);
+        SplashScreen.hide();
+        // setTimeout(() => SplashScreen.hide(), 1000);
+      });
+    } catch (e) {
+      //console.log(e);
       SplashScreen.hide();
-      // setTimeout(() => SplashScreen.hide(), 1000);
-    });
+      Alert.alert(
+        'Error en la conexión al servidor, por favor revise su conexión a Internet y reinicie la aplicación.',
+        [
+          {
+            text: 'OK',
+            style: 'cancel',
+          },
+        ],
+      );
+    }
   };
 
   const validateTokenAndRedirect = async token => {
@@ -74,11 +89,15 @@ const MainScreen = ({navigation}) => {
   };
 
   const getCategories = async () => {
-    await sgBackend.get('/categories').then(response => {
-      if (response.data) {
-        setItems(response.data.sort((a, b) => sortExceptNull(a, b)));
-      }
-    });
+    try {
+      await sgBackend.get('/categories').then(response => {
+        if (response.data) {
+          setItems(response.data.sort((a, b) => sortExceptNull(a, b)));
+        }
+      });
+    } catch (e) {
+      //console.log(e);
+    }
   };
 
   const getLocalToken = async () => {
@@ -180,6 +199,9 @@ const MainScreen = ({navigation}) => {
         setItems={setItems}
         style={styles.dropdown}
         dropDownContainerStyle={styles.dropdown}
+        translation={{
+          NOTHING_TO_SHOW: 'No se pudieron cargar las categorías',
+        }}
       />
       {data ? (
         <View style={styles.dataView}>
