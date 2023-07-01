@@ -217,6 +217,7 @@ const PanelScreen = ({navigation}) => {
       await sgBackend
         .post('/login', {
           email: loginUser,
+          username: loginUser,
           password: loginPassword,
         })
         .then(async response => {
